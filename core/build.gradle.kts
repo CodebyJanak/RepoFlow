@@ -58,7 +58,11 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.documentfile)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.jgit) {
+        exclude(group = "org.apache.httpcomponents", module = "httpclient")
+    }
 
     debugImplementation(libs.androidx.ui.tooling)
 }

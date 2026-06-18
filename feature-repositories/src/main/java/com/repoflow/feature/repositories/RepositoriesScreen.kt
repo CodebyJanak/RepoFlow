@@ -50,6 +50,7 @@ import com.repoflow.core.ui.components.SearchBar
 
 @Composable
 fun RepositoriesScreen(
+    onNavigateToDetail: (String, String) -> Unit = { _, _ -> },
     viewModel: RepositoriesViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -142,7 +143,7 @@ fun RepositoriesScreen(
                                 forks = repo.forks,
                                 isPrivate = repo.isPrivate,
                                 isFavorite = repo.isFavorite,
-                                onClick = {},
+                                onClick = { onNavigateToDetail(repo.owner.login, repo.name) },
                                 onFavoriteClick = { viewModel.toggleFavorite(repo.id, repo.isFavorite) }
                             )
                         }

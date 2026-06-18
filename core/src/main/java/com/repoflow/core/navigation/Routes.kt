@@ -1,5 +1,6 @@
 package com.repoflow.core.navigation
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -18,6 +19,17 @@ sealed class Routes(
     data object Settings : Routes("settings", "https://repoflow.app/settings")
     data object Login : Routes("login", "https://repoflow.app/login")
     data object Account : Routes("account", "https://repoflow.app/account")
+    data object RepositoryDetail : Routes("repository/{owner}/{name}", "https://repoflow.app/repository/{owner}/{name}") {
+        fun createRoute(owner: String, name: String): String = "repository/$owner/$name"
+    }
+
+    data object GitStatus : Routes("git-status?localPath={localPath}", "https://repoflow.app/git-status/{localPath}") {
+        fun createRoute(localPath: String): String = "git-status?localPath=${Uri.encode(localPath)}"
+    }
+
+    data object Commit : Routes("commit?localPath={localPath}", "https://repoflow.app/commit/{localPath}") {
+        fun createRoute(localPath: String): String = "commit?localPath=${Uri.encode(localPath)}"
+    }
 
     companion object {
         val bottomNavRoutes = listOf(Home, Repositories, Workspace, Activity, Settings)
