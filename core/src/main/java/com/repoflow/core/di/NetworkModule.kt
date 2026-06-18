@@ -1,6 +1,7 @@
 package com.repoflow.core.di
 
 import com.repoflow.core.data.remote.ApiService
+import com.repoflow.core.data.remote.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,11 +21,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(logging)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

@@ -22,7 +22,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "repoflow_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

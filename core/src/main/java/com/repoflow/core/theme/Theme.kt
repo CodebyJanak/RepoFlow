@@ -1,6 +1,8 @@
 package com.repoflow.core.theme
 
+import android.app.Activity
 import android.os.Build
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -8,19 +10,101 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = DarkPrimary,
+    onPrimary = DarkOnPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    onPrimaryContainer = DarkOnPrimaryContainer,
+    secondary = DarkSecondary,
+    onSecondary = DarkOnSecondary,
+    secondaryContainer = DarkSecondaryContainer,
+    onSecondaryContainer = DarkOnSecondaryContainer,
+    tertiary = DarkTertiary,
+    onTertiary = DarkOnTertiary,
+    tertiaryContainer = DarkTertiaryContainer,
+    onTertiaryContainer = DarkOnTertiaryContainer,
+    error = DarkError,
+    onError = DarkOnError,
+    errorContainer = DarkErrorContainer,
+    onErrorContainer = DarkOnErrorContainer,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
+    surface = DarkSurface,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkOnSurfaceVariant,
+    outline = DarkOutline,
+    outlineVariant = DarkOutlineVariant,
+    surfaceDim = DarkSurfaceDim,
+    surfaceBright = DarkSurfaceBright,
+    surfaceContainerLowest = DarkSurfaceContainerLowest,
+    surfaceContainerLow = DarkSurfaceContainerLow,
+    surfaceContainer = DarkSurfaceContainer,
+    surfaceContainerHigh = DarkSurfaceContainerHigh,
+    surfaceContainerHighest = DarkSurfaceContainerHighest,
+    inverseSurface = DarkInverseSurface,
+    inverseOnSurface = DarkInverseOnSurface,
+    inversePrimary = DarkInversePrimary,
+    scrim = DarkScrim
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = LightPrimary,
+    onPrimary = LightOnPrimary,
+    primaryContainer = LightPrimaryContainer,
+    onPrimaryContainer = LightOnPrimaryContainer,
+    secondary = LightSecondary,
+    onSecondary = LightOnSecondary,
+    secondaryContainer = LightSecondaryContainer,
+    onSecondaryContainer = LightOnSecondaryContainer,
+    tertiary = LightTertiary,
+    onTertiary = LightOnTertiary,
+    tertiaryContainer = LightTertiaryContainer,
+    onTertiaryContainer = LightOnTertiaryContainer,
+    error = LightError,
+    onError = LightOnError,
+    errorContainer = LightErrorContainer,
+    onErrorContainer = LightOnErrorContainer,
+    background = LightBackground,
+    onBackground = LightOnBackground,
+    surface = LightSurface,
+    onSurface = LightOnSurface,
+    surfaceVariant = LightSurfaceVariant,
+    onSurfaceVariant = LightOnSurfaceVariant,
+    outline = LightOutline,
+    outlineVariant = LightOutlineVariant,
+    surfaceDim = LightSurfaceDim,
+    surfaceBright = LightSurfaceBright,
+    surfaceContainerLowest = LightSurfaceContainerLowest,
+    surfaceContainerLow = LightSurfaceContainerLow,
+    surfaceContainer = LightSurfaceContainer,
+    surfaceContainerHigh = LightSurfaceContainerHigh,
+    surfaceContainerHighest = LightSurfaceContainerHighest,
+    inverseSurface = LightInverseSurface,
+    inverseOnSurface = LightInverseOnSurface,
+    inversePrimary = LightInversePrimary,
+    scrim = LightScrim
 )
+
+object RepoFlowAnimationTokens {
+    val defaultDuration = 350
+    val fastDuration = 200
+    val slowDuration = 600
+
+    val defaultTween = tween<Float>(defaultDuration)
+    val fastTween = tween<Float>(fastDuration)
+    val slowTween = tween<Float>(slowDuration)
+    val spring = androidx.compose.animation.core.spring(
+        dampingRatio = 0.8f,
+        stiffness = 300f
+    )
+}
 
 @Composable
 fun RepoFlowTheme(
@@ -37,9 +121,19 @@ fun RepoFlowTheme(
         else -> LightColorScheme
     }
 
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.surfaceDim.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = RepoFlowTypography,
+        shapes = RepoFlowShapes,
         content = content
     )
 }

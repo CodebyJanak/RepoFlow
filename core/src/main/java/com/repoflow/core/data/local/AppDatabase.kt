@@ -7,7 +7,7 @@ import com.repoflow.core.data.local.entity.RepositoryEntity
 
 @Database(
     entities = [RepositoryEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.security.crypto)
 
     debugImplementation(libs.androidx.ui.tooling)
 }

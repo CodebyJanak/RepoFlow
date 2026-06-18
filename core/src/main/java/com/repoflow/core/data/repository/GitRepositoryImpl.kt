@@ -6,7 +6,7 @@ import com.repoflow.core.data.mapper.RepositoryMapper.toEntity
 import com.repoflow.core.data.remote.ApiService
 import com.repoflow.core.domain.model.Commit
 import com.repoflow.core.domain.model.GitRepository
-import com.repoflow.core.domain.repository.GitRepository
+import com.repoflow.core.domain.repository.GitRepository as GitRepositoryInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -16,14 +16,16 @@ import javax.inject.Singleton
 class GitRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val repositoryDao: RepositoryDao
-) : GitRepository {
+) : GitRepositoryInterface {
 
     override suspend fun getRepositories(): Result<List<GitRepository>> {
         return try {
             val response = apiService.getRepositories()
             if (response.isSuccessful) {
-                val repos = response.body()?.map { it.toDomain() } ?: emptyList()
-                repositoryDao.insertAll(repos.map { it.toEntity() })
+                val dtos = response.body() ?: emptyList()
+                val repos = dtos.map { it.toDomain() }
+                val entities = repos.map { it.toEntity() }
+                repositoryDao.insertAll(entities)
                 Result.success(repos)
             } else {
                 Result.failure(Exception("Failed to fetch repos: ${response.code()}"))
@@ -31,6 +33,53 @@ class GitRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun searchRepositories(query: String): Result<List<GitRepository>> {
+        return try {
+            val response = apiService.searchRepositories(query)
+            if (response.isSuccessful) {
+                val dtos = response.body()?.items ?: emptyList()
+                val repos = dtos.map { it.toDomain() }
+                Result.success(repos)
+            } else {
+                Result.failure(Exception("Search failed: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun getLocalRepositoriesFlow(): Flow<List<GitRepository>> {
+        return repositoryDao.getAllRepositories().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    fun getLocalRepositoriesFlow(sortOrder: SortOrder): Flow<List<GitRepository>> {
+        val flow = when (sortOrder) {
+            SortOrder.STARS -> repositoryDao.getAllRepositoriesSortedByStars()
+            SortOrder.NAME -> repositoryDao.getAllRepositoriesSortedByName()
+            SortOrder.FORKS -> repositoryDao.getAllRepositoriesSortedByForks()
+            SortOrder.UPDATED -> repositoryDao.getAllRepositories()
+        }
+        return flow.map { entities -> entities.map { it.toDomain() } }
+    }
+
+    fun searchLocalRepositories(query: String): Flow<List<GitRepository>> {
+        return repositoryDao.searchRepositories(query).map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    fun getFavoriteRepositoriesFlow(): Flow<List<GitRepository>> {
+        return repositoryDao.getFavoriteRepositories().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun toggleFavorite(repoId: Long, isFavorite: Boolean) {
+        repositoryDao.setFavorite(repoId, isFavorite)
     }
 
     override suspend fun getRepository(owner: String, name: String): Result<GitRepository> {
@@ -84,4 +133,8 @@ class GitRepositoryImpl @Inject constructor(
     override suspend fun getCommitHistory(localPath: String): Result<List<Commit>> {
         return Result.failure(NotImplementedError("Commit history not yet implemented"))
     }
+}
+
+enum class SortOrder {
+    STARS, NAME, FORKS, UPDATED
 }

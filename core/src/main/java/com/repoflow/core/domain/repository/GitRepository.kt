@@ -5,7 +5,9 @@ import com.repoflow.core.domain.model.GitRepository
 
 interface GitRepository {
     suspend fun getRepositories(): Result<List<GitRepository>>
+    suspend fun searchRepositories(query: String): Result<List<GitRepository>>
     suspend fun getRepository(owner: String, name: String): Result<GitRepository>
+    suspend fun toggleFavorite(repoId: Long, isFavorite: Boolean)
     suspend fun cloneRepository(url: String, localPath: String): Result<Unit>
     suspend fun pullRepository(localPath: String): Result<Unit>
     suspend fun pushRepository(localPath: String, force: Boolean = false): Result<Unit>
