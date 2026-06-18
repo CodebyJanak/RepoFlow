@@ -8,6 +8,7 @@ import com.repoflow.core.data.remote.ApiService
 import com.repoflow.core.domain.model.Branch
 import com.repoflow.core.domain.model.Commit
 import com.repoflow.core.domain.model.Contributor
+import com.repoflow.core.domain.model.DiffFile
 import com.repoflow.core.domain.model.GitRepository
 import com.repoflow.core.domain.model.Release
 import com.repoflow.core.domain.model.StatusFile
@@ -259,6 +260,9 @@ class GitRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getFileDiff(localPath: String, filePath: String, staged: Boolean): Result<DiffFile> =
+        gitManager.getFileDiff(localPath, filePath, staged)
 }
 
 enum class SortOrder {

@@ -73,6 +73,7 @@ fun GitStatusScreen(
     localPath: String,
     onBack: () -> Unit,
     onNavigateToCommit: (String) -> Unit = {},
+    onNavigateToDiff: (String, Boolean) -> Unit = { _, _ -> },
     viewModel: GitStatusViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -145,6 +146,7 @@ fun GitStatusScreen(
                     onUnstageFile = viewModel::unstageFile,
                     onStageAll = viewModel::stageAll,
                     onUnstageAll = viewModel::unstageAll,
+                    onNavigateToDiff = onNavigateToDiff,
                     modifier = Modifier.padding(padding)
                 )
             }
@@ -159,6 +161,7 @@ private fun GitStatusContent(
     onUnstageFile: (String) -> Unit,
     onStageAll: () -> Unit,
     onUnstageAll: () -> Unit,
+    onNavigateToDiff: (String, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -201,6 +204,7 @@ private fun GitStatusContent(
             items(state.conflictingFiles, key = { it.path }) { file ->
                 StatusFileRow(
                     file = file,
+                    onClick = { onNavigateToDiff(file.path, file.staged) },
                     onStageToggle = {
                         if (file.staged) onUnstageFile(file.path) else onStageFile(file.path)
                     },
@@ -221,6 +225,7 @@ private fun GitStatusContent(
             items(state.modifiedFiles, key = { it.path }) { file ->
                 StatusFileRow(
                     file = file,
+                    onClick = { onNavigateToDiff(file.path, file.staged) },
                     onStageToggle = {
                         if (file.staged) onUnstageFile(file.path) else onStageFile(file.path)
                     },
@@ -241,6 +246,7 @@ private fun GitStatusContent(
             items(state.newFiles, key = { it.path }) { file ->
                 StatusFileRow(
                     file = file,
+                    onClick = { onNavigateToDiff(file.path, file.staged) },
                     onStageToggle = {
                         if (file.staged) onUnstageFile(file.path) else onStageFile(file.path)
                     },
@@ -261,6 +267,7 @@ private fun GitStatusContent(
             items(state.deletedFiles, key = { it.path }) { file ->
                 StatusFileRow(
                     file = file,
+                    onClick = { onNavigateToDiff(file.path, file.staged) },
                     onStageToggle = {
                         if (file.staged) onUnstageFile(file.path) else onStageFile(file.path)
                     },
@@ -447,11 +454,12 @@ private fun SectionHeader(
 @Composable
 private fun StatusFileRow(
     file: StatusFile,
+    onClick: () -> Unit,
     onStageToggle: () -> Unit,
     accentColor: Color
 ) {
     Card(
-        onClick = onStageToggle,
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(tween(200)),
@@ -465,12 +473,17 @@ private fun StatusFileRow(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = if (file.staged) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-                contentDescription = if (file.staged) "Staged" else "Unstaged",
-                tint = if (file.staged) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            IconButton(
+                onClick = onStageToggle,
                 modifier = Modifier.size(22.dp)
-            )
+            ) {
+                Icon(
+                    imageVector = if (file.staged) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
+                    contentDescription = if (file.staged) "Staged" else "Unstaged",
+                    tint = if (file.staged) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
 

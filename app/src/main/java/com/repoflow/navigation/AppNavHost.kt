@@ -15,6 +15,7 @@ import com.repoflow.core.navigation.NavAnimations
 import com.repoflow.core.navigation.Routes
 import com.repoflow.feature.activity.ActivityScreen
 import com.repoflow.feature.commit.CommitScreen
+import com.repoflow.feature.diffviewer.DiffViewerScreen
 import com.repoflow.feature.home.HomeScreen
 import com.repoflow.feature.gitstatus.GitStatusScreen
 import com.repoflow.feature.repositorydetail.RepositoryDetailScreen
@@ -197,6 +198,11 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() },
                 onNavigateToCommit = { path ->
                     navController.navigate(Routes.Commit.createRoute(path))
+                },
+                onNavigateToDiff = { filePath, staged ->
+                    navController.navigate(
+                        Routes.DiffViewer.createRoute(localPath, filePath, staged)
+                    )
                 }
             )
         }
@@ -219,6 +225,36 @@ fun AppNavHost(
             } ?: ""
             CommitScreen(
                 localPath = localPath,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.DiffViewer.route,
+            arguments = listOf(
+                navArgument("localPath") { type = NavType.StringType; defaultValue = "" },
+                navArgument("filePath") { type = NavType.StringType; defaultValue = "" },
+                navArgument("staged") { type = NavType.BoolType; defaultValue = false }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.DiffViewer.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val localPath = backStackEntry.arguments?.getString("localPath")?.let {
+                Uri.decode(it)
+            } ?: ""
+            val filePath = backStackEntry.arguments?.getString("filePath")?.let {
+                Uri.decode(it)
+            } ?: ""
+            val staged = backStackEntry.arguments?.getBoolean("staged") ?: false
+            DiffViewerScreen(
+                localPath = localPath,
+                filePath = filePath,
+                staged = staged,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -3,6 +3,7 @@ package com.repoflow.core.domain.repository
 import com.repoflow.core.domain.model.Branch
 import com.repoflow.core.domain.model.Commit
 import com.repoflow.core.domain.model.Contributor
+import com.repoflow.core.domain.model.DiffFile
 import com.repoflow.core.domain.model.GitRepository
 import com.repoflow.core.domain.model.Release
 import com.repoflow.core.domain.model.StatusFile
@@ -43,4 +44,6 @@ interface GitRepository {
     suspend fun getRemoteCommits(owner: String, name: String, branch: String? = null): Result<List<Commit>>
     suspend fun getContributors(owner: String, name: String): Result<List<Contributor>>
     suspend fun getReleases(owner: String, name: String): Result<List<Release>>
+
+    suspend fun getFileDiff(localPath: String, filePath: String, staged: Boolean = false): Result<DiffFile>
 }

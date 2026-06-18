@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":feature-repository-detail"))
     implementation(project(":feature-git-status"))
     implementation(project(":feature-commit"))
+    implementation(project(":feature-diff-viewer"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

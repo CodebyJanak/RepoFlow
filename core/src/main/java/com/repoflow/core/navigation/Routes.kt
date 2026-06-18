@@ -31,6 +31,14 @@ sealed class Routes(
         fun createRoute(localPath: String): String = "commit?localPath=${Uri.encode(localPath)}"
     }
 
+    data object DiffViewer : Routes(
+        "diff-viewer?localPath={localPath}&filePath={filePath}&staged={staged}",
+        "https://repoflow.app/diff-viewer/{localPath}/{filePath}/{staged}"
+    ) {
+        fun createRoute(localPath: String, filePath: String, staged: Boolean = false): String =
+            "diff-viewer?localPath=${Uri.encode(localPath)}&filePath=${Uri.encode(filePath)}&staged=$staged"
+    }
+
     companion object {
         val bottomNavRoutes = listOf(Home, Repositories, Workspace, Activity, Settings)
 

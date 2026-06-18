@@ -1,11 +1,16 @@
 package com.repoflow.core.data.git
 
 import com.repoflow.core.data.local.datastore.SecureStorage
+import com.repoflow.core.domain.model.DiffFile
+import com.repoflow.core.domain.model.DiffHunk
+import com.repoflow.core.domain.model.DiffLine
+import com.repoflow.core.domain.model.DiffLineType
 import com.repoflow.core.domain.model.FileStatusType
 import com.repoflow.core.domain.model.Commit
 import com.repoflow.core.domain.model.StatusFile
 import com.repoflow.core.domain.model.Tag
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.diff.DiffFormatter
 import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.api.errors.CanceledException
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException
@@ -385,6 +390,113 @@ class GitManager @Inject constructor(
 
     suspend fun isRepository(localPath: String): Boolean = withContext(Dispatchers.IO) {
         File(localPath, ".git").exists()
+    }
+
+    suspend fun getFileDiff(
+        localPath: String,
+        filePath: String,
+        staged: Boolean = false
+    ): Result<DiffFile> = withContext(Dispatchers.IO) {
+        runCatchingJGit("Get diff") {
+            openGit(localPath).use { git ->
+                val repo = git.repository
+
+                val entries = if (staged) {
+                    git.diff().setCached(true).call()
+                } else {
+                    git.diff().setCached(false).call()
+                }
+
+                val entry = entries.find {
+                    it.newPath == filePath || it.oldPath == filePath
+                } ?: return@use Result.failure(
+                    GitException("No changes found for file: $filePath")
+                )
+
+                val outputStream = java.io.ByteArrayOutputStream()
+                val formatter = DiffFormatter(outputStream)
+                formatter.setRepository(repo)
+                formatter.setContext(Int.MAX_VALUE)
+                formatter.format(entry)
+                formatter.close()
+
+                val diffText = outputStream.toString("UTF-8")
+                parseDiff(diffText, entry.oldPath, entry.newPath)
+            }
+        }
+    }
+
+    private fun parseDiff(diffText: String, oldPath: String, newPath: String): DiffFile {
+        val lines = diffText.lines()
+        val hunks = mutableListOf<DiffHunk>()
+        val currentHunkLines = mutableListOf<DiffLine>()
+        var currentOldStart = 0
+        var currentOldCount = 0
+        var currentNewStart = 0
+        var currentNewCount = 0
+        var oldLineNum = 0
+        var newLineNum = 0
+        var inHunk = false
+        val hunkHeader = Regex("@@ -(\\d+)(?:,(\\d+))? \\+(\\d+)(?:,(\\d+))? @@.*")
+
+        for (line in lines) {
+            when {
+                hunkHeader.matches(line) -> {
+                    if (currentHunkLines.isNotEmpty()) {
+                        hunks.add(
+                            DiffHunk(
+                                currentOldStart, currentOldCount,
+                                currentNewStart, currentNewCount,
+                                currentHunkLines.toList()
+                            )
+                        )
+                        currentHunkLines.clear()
+                    }
+                    val match = hunkHeader.find(line)!!
+                    currentOldStart = match.groupValues[1].toIntOrNull() ?: 1
+                    currentOldCount = match.groupValues[2].toIntOrNull() ?: 1
+                    currentNewStart = match.groupValues[3].toIntOrNull() ?: 1
+                    currentNewCount = match.groupValues[4].toIntOrNull() ?: 1
+                    oldLineNum = currentOldStart
+                    newLineNum = currentNewStart
+                    inHunk = true
+                }
+                !inHunk -> { /* skip metadata lines */ }
+                line.startsWith("+") && line.length > 1 -> {
+                    currentHunkLines.add(
+                        DiffLine(DiffLineType.ADDED, null, newLineNum, line.substring(1))
+                    )
+                    newLineNum++
+                }
+                line.startsWith("-") && line.length > 1 -> {
+                    currentHunkLines.add(
+                        DiffLine(DiffLineType.REMOVED, oldLineNum, null, line.substring(1))
+                    )
+                    oldLineNum++
+                }
+                line.startsWith(" ") -> {
+                    val content = if (line.length > 1) line.substring(1) else ""
+                    currentHunkLines.add(
+                        DiffLine(DiffLineType.UNCHANGED, oldLineNum, newLineNum, content)
+                    )
+                    oldLineNum++
+                    newLineNum++
+                }
+                line.startsWith("\\") -> { /* no newline warning */ }
+            }
+        }
+
+        if (currentHunkLines.isNotEmpty()) {
+            hunks.add(
+                DiffHunk(
+                    currentOldStart, currentOldCount,
+                    currentNewStart, currentNewCount,
+                    currentHunkLines.toList()
+                )
+            )
+        }
+
+        return DiffFile(oldPath = oldPath, newPath = newPath, hunks = hunks)
     }
 
     private fun openGit(localPath: String): Git = Git.open(File(localPath))
