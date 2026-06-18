@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RepoFlow</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_repositories">Repositories</string>
+    <string name="nav_workspace">Workspace</string>
+    <string name="nav_activity">Activity</string>
+    <string name="nav_settings">Settings</string>
+</resources>
