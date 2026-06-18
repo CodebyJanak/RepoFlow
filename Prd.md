@@ -12,7 +12,7 @@ Technology: Kotlin + Jetpack Compose
 
 Build System: GitHub Actions
 
-Development Environment: SmartIDE (Mobile)
+
 
 ---
 
