@@ -16,7 +16,9 @@ class SecureStorage @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private val prefs: SharedPreferences by lazy {
-        val masterKey = MasterKey(context)
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
         EncryptedSharedPreferences.create(
             context,
             "repoflow_secure_prefs",

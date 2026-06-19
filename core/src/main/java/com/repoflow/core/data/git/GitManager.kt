@@ -231,7 +231,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("List branches") {
             openGit(localPath).use { git ->
                 git.branchList()
-                    .setListMode(ListBranchCommand.ListOption.ALL)
+                    .setListMode(ListBranchCommand.ListMode.ALL)
                     .call()
                     .map { ref ->
                         ref.name.removePrefix("refs/heads/")

@@ -19,7 +19,7 @@ workmanager = "2.9.0"
 coroutines = "1.7.3"
 coil = "2.5.0"
 documentfile = "1.0.1"
-securityCrypto = "1.0.0"
+securityCrypto = "1.1.0-alpha06"
 jgit = "6.8.0.202311291450-r"
 
 [libraries]

@@ -46,7 +46,7 @@ class PcDiscoveryService @Inject constructor(
 
         isListening = true
 
-        val thread = Thread.ofVirtual().start {
+        val thread = Thread {
             try {
                 val socket = DatagramSocket(DISCOVERY_PORT).also { listenSocket = it }
                 socket.soTimeout = BEACON_TIMEOUT_MS
@@ -78,6 +78,7 @@ class PcDiscoveryService @Inject constructor(
                 }
             } catch (_: Exception) { }
         }.also { listenThread = it }
+        thread.start()
 
         awaitClose {
             stopListening()
