@@ -27,7 +27,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Workflow
+import androidx.compose.material.icons.outlined.AccountTree
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -271,7 +271,7 @@ private fun WorkflowCard(
     modifier: Modifier = Modifier
 ) {
     FeatureCard(
-        icon = Icons.Outlined.Workflow,
+        icon = Icons.Outlined.AccountTree,
         title = workflow.name,
         description = workflow.path,
         onClick = {}
@@ -323,10 +323,11 @@ private fun WorkflowRunCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    if (run.headBranch != null) {
+                    val headBranch = run.headBranch
+                    if (headBranch != null) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = run.headBranch,
+                            text = headBranch,
                             style = MaterialTheme.typography.labelSmall.copy(fontFamily = FontFamily.Monospace),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -334,9 +335,10 @@ private fun WorkflowRunCard(
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (run.actor != null) {
+                    val actor = run.actor
+                    if (actor != null) {
                         Text(
-                            text = run.actor.login,
+                            text = actor.login,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )

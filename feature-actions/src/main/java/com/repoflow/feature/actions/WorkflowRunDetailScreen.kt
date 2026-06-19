@@ -282,8 +282,9 @@ private fun RunDetails(run: WorkflowRun) {
             DetailRow(label = "Commit", value = run.headSha.take(7))
             DetailRow(label = "Run number", value = "#${run.runNumber}")
             DetailRow(label = "Attempt", value = "#${run.runAttempt}")
-            if (run.actor != null) {
-                DetailRow(label = "Triggered by", value = run.actor.login)
+            val actor = run.actor
+            if (actor != null) {
+                DetailRow(label = "Triggered by", value = actor.login)
             }
         }
     }
@@ -359,9 +360,10 @@ private fun JobCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    if (job.conclusion != null) {
+                    val jobConclusion = job.conclusion
+                    if (jobConclusion != null) {
                         Text(
-                            text = job.conclusion.replaceFirstChar { it.uppercase() },
+                            text = jobConclusion.replaceFirstChar { it.uppercase() },
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -429,11 +431,12 @@ private fun StepItem(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
-        if (step.conclusion != null) {
+        val stepConclusion = step.conclusion
+        if (stepConclusion != null) {
             Text(
-                text = step.conclusion.replaceFirstChar { it.uppercase() },
+                text = stepConclusion.replaceFirstChar { it.uppercase() },
                 style = MaterialTheme.typography.labelSmall,
-                color = when (step.conclusion) {
+                color = when (stepConclusion) {
                     "success" -> MaterialTheme.colorScheme.primary
                     "failure" -> MaterialTheme.colorScheme.error
                     else -> MaterialTheme.colorScheme.onSurfaceVariant

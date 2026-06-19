@@ -9,28 +9,30 @@ The codebase was using APIs introduced in Material3 **1.2.0** while the project'
 | API | Material3 Version | Replacement |
 |-----|-------------------|-------------|
 | `HorizontalDivider` | 1.2.0+ | `Divider` |
-| `FilterChipDefaults.filterChipBorder(enabled, selected)` | 1.2.0+ | Remove `enabled`/`selected` params |
+| `FilterChipDefaults.filterChipBorder(enabled, selected)` | 1.2.0+ | Remove params |
 | `contentColorFor` | 1.2.0+ | Remove unused import |
+| `FilterChip` / `FilterChipDefaults.*` | Experimental in 1.1.x | Add `@OptIn(ExperimentalMaterial3Api::class)` |
 
 ### Icon API Mismatches
 
 | Icon | Issue | Fix |
 |------|-------|-----|
-| `Icons.AutoMirrored.Filled.ArrowUpward` | `ArrowUpward` is not in `AutoMirrored` set | `Icons.Filled.ArrowUpward` |
-| `Icons.AutoMirrored.Filled.History` | `History` is not in `AutoMirrored` set | `Icons.Filled.History` |
+| `Icons.AutoMirrored.Filled.ArrowUpward` | Not in `AutoMirrored` set | `Icons.Filled.ArrowUpward` |
+| `Icons.AutoMirrored.Filled.History` | Not in `AutoMirrored` set | `Icons.Filled.History` |
+| `Icons.Outlined.Sync` | Missing import | Added `import ...icons.outlined.Sync` |
+| `Icons.Outlined.Workflow` | Icon does not exist in `outlined` variant | `Icons.Outlined.AccountTree` |
 
-### Kotlin API Mismatch
+### Cross-module Smart Cast
 
-`String.removePrefix(Regex)` — `Regex` is not a `CharSequence`. Replaced with `String.replaceFirst(Regex, "")`.
+`val` properties in data classes from the `:core` module cannot be smart-cast in feature modules. Properties like `headBranch`, `actor`, `conclusion` from `WorkflowRun`, `WorkflowJob`, `JobStep` require local variable assignment before null checking.
 
-### Missing Imports
+### Kotlin API Ambiguity
 
-- `ActivityViewModel.kt` — missing `import androidx.lifecycle.viewModelScope`
-- `ActionsDashboardScreen.kt` — missing `import com.repoflow.core.domain.model.Workflow`
+`replaceFirstChar { it.uppercase() }` is ambiguous because `Char.uppercase()` returns `String` and both `(Char) -> Char` and `(Char) -> CharSequence` overloads exist. Fixed by ensuring the receiver is a non-null `String` via local variable.
 
 ---
 
-## Files Changed (17 files, +40/-39 lines)
+## Round 1 Files Changed (17 files, +40/-39 lines)
 
 ### MODULE 1 — feature-activity
 
@@ -59,28 +61,54 @@ The codebase was using APIs introduced in Material3 **1.2.0** while the project'
 | `CommitScreen.kt` | `AutoMirrored.Filled.History` → `Filled.History`; `HorizontalDivider` → `Divider`; removed `contentColorFor` import |
 | `CommitViewModel.kt` | `replaceFirst(Regex, "")` replaces `removePrefix(Regex)` |
 
-### GLOBAL SCAN — HorizontalDivider → Divider across entire codebase
+### GLOBAL SCAN — HorizontalDivider → Divider
 
 | File | Changes |
 |------|---------|
-| `AccountScreen.kt` | Import + usage |
-| `SettingsScreen.kt` | Import + usage |
-| `RepositoryDetailScreen.kt` | Import + usage |
-| `GitStatusScreen.kt` | Import + usage |
-| `IssueDetailScreen.kt` | Import + usage |
-| `PullRequestDetailScreen.kt` | Import + 2 usages |
-| `PcBridgeRemoteScreen.kt` | Import only (no usage of `HorizontalDivider`) |
-| `GitErrorHelpScreen.kt` | Import + 2 usages |
-| `ConflictHelpScreen.kt` | Import + usage |
-| `RepoSummaryScreen.kt` | Import + 2 usages |
+| `AccountScreen.kt`, `SettingsScreen.kt`, `RepositoryDetailScreen.kt`, `GitStatusScreen.kt`, `IssueDetailScreen.kt`, `PullRequestDetailScreen.kt`, `PcBridgeRemoteScreen.kt`, `GitErrorHelpScreen.kt`, `ConflictHelpScreen.kt`, `RepoSummaryScreen.kt` | All imports + usages replaced |
 
 ---
 
-## Imports Added/Removed
+## Round 2 Files Changed (5 files, +24/-14 lines)
 
-### Added
+### ActivityScreen.kt
+
+- Added `@OptIn(ExperimentalMaterial3Api::class)` to `FilterChipRow` function
+- Added `import androidx.compose.material.icons.outlined.Sync`
+- Changed `verticalAlignment = Alignment.Center` → `Alignment.CenterVertically`
+
+### ActionsDashboardScreen.kt
+
+- Replaced `Icons.Outlined.Workflow` → `Icons.Outlined.AccountTree` (icon did not exist)
+- Fixed cross-module smart cast for `run.headBranch` → local `val headBranch`
+- Fixed cross-module smart cast for `run.actor` → local `val actor`
+
+### WorkflowRunDetailScreen.kt
+
+- Fixed cross-module smart cast for `run.actor` → local `val actor`
+- Fixed cross-module smart cast for `job.conclusion` → local `val jobConclusion`
+- Fixed cross-module smart cast for `step.conclusion` → local `val stepConclusion`
+
+### CommitScreen.kt
+
+- Added `@OptIn(ExperimentalMaterial3Api::class)` to `CommitContent` function
+
+### RepositoriesScreen.kt
+
+- Added `import androidx.compose.material3.ExperimentalMaterial3Api`
+- Added `@OptIn(ExperimentalMaterial3Api::class)` to `SortChipsRow` function
+
+---
+
+## Imports Summary
+
+### Added (Round 1)
 - `import androidx.lifecycle.viewModelScope` — `ActivityViewModel.kt`
 - `import com.repoflow.core.domain.model.Workflow` — `ActionsDashboardScreen.kt`
+
+### Added (Round 2)
+- `import androidx.compose.material.icons.outlined.Sync` — `ActivityScreen.kt`
+- `import androidx.compose.material3.ExperimentalMaterial3Api` — `RepositoriesScreen.kt`
 
 ### Removed
 - `import androidx.compose.material3.contentColorFor` — `CommitScreen.kt`
@@ -90,43 +118,39 @@ The codebase was using APIs introduced in Material3 **1.2.0** while the project'
 
 ---
 
-## Dependencies Added
+## All Issues RESOLVED
 
-None. All required dependencies already present:
-- `libs.androidx.material3` (via Compose BOM) — provides `Divider`
-- `libs.androidx.material.icons.extended` — provides all icon variants
-- `libs.androidx.lifecycle.viewmodel.compose` — provides `viewModelScope`
-
----
-
-## Remaining Expected Blockers
-
-| Issue | Status | Notes |
-|-------|--------|-------|
-| `HorizontalDivider` unresolved | **RESOLVED** — Replaced with `Divider` in all 17 files |
-| `ArrowUpward` unresolved | **RESOLVED** — Changed to `Icons.Filled.ArrowUpward` |
-| `History` icon unresolved | **RESOLVED** — Changed to `Icons.Filled.History` |
-| `Workflow` unresolved | **RESOLVED** — Added import for domain model `Workflow` |
-| `filterChipBorder` `enabled`/`selected` | **RESOLVED** — Removed from call |
-| `viewModelScope` unresolved | **RESOLVED** — Added import to `ActivityViewModel.kt` |
-| `contentColorFor` unresolved | **RESOLVED** — Removed unused import |
-| `Regex` vs `CharSequence` | **RESOLVED** — Changed to `String.replaceFirst(Regex, "")` |
-| `replaceFirstChar` errors | **No action needed** — API exists in Kotlin 1.9.22 |
-| `Alignment.CenterVertically` misuse | **Not found** — All usages are correct |
-| `Icons.Filled.Sync` receiver mismatch | **Not confirmed** — Import is correct; icon exists in extended library |
-| Smart cast impossible | **Not confirmed** — `WorkflowJob.conclusion` is `val` so smart cast works |
-| Composable invocation outside composable | **Not confirmed** — All composable calls are in `@Composable` scope |
-| Suspend function called outside coroutine | **Not confirmed** — All `suspend` calls are in `viewModelScope.launch` |
+| Issue | Resolution |
+|-------|-----------|
+| `HorizontalDivider` unresolved | → `Divider` (17 files) |
+| `ArrowUpward` unresolved | → `Icons.Filled.ArrowUpward` |
+| `History` icon unresolved | → `Icons.Filled.History` |
+| `Workflow` icon unresolved | → `Icons.Outlined.AccountTree` |
+| `Icons.Outlined.Sync` missing | Added import |
+| `filterChipBorder` `enabled`/`selected` params | Removed |
+| `viewModelScope` unresolved | Added import |
+| `contentColorFor` unresolved | Removed import |
+| `Regex` vs `CharSequence` | → `String.replaceFirst(Regex, "")` |
+| Experimental Material3 API warnings | Added `@OptIn` to all containing functions |
+| `Alignment` vs `Alignment.Vertical` mismatch | → `Alignment.CenterVertically` |
+| Smart cast impossible (cross-module) | Local variable assignment |
+| `replaceFirstChar` on nullable | Local variable + smart cast |
+| `replaceFirstChar` ambiguous overload | Fixed by ensuring non-null receiver |
+| Composable invocation outside composable | Not found |
+| Suspend function outside coroutine | Not found |
 
 ---
 
 ## Success Criteria
 
-- [x] All known Material3 1.2.0+ APIs replaced with Material3 1.1.2 compatible equivalents
+- [x] All Material3 1.2.0+ APIs replaced with 1.1.2 compatible equivalents
 - [x] All icon path errors fixed
 - [x] All missing imports added
 - [x] Regex/removePrefix type mismatch fixed
-- [ ] `compileDebugKotlin` — **requires CI build** (no local gradlew)
-- [ ] `compileReleaseKotlin` — **requires CI build**
-- [ ] `assembleDebug` — **requires CI build** (needs keystore for release)
+- [x] `@OptIn(ExperimentalMaterial3Api::class)` on all FilterChip users
+- [x] Cross-module smart cast workaround via local variables
+- [x] `replaceFirstChar` ambiguity resolved
+- [ ] `compileDebugKotlin` — **requires CI build**
+- [ ] `compileReleaseKotlin` — **requires CI build**  
+- [ ] `assembleDebug` — **requires CI build**
 - [ ] `assembleRelease` — **requires CI build**

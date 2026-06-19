@@ -171,6 +171,7 @@ fun CommitScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CommitContent(
     state: CommitUiState,
