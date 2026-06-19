@@ -71,6 +71,7 @@ class GitManager @Inject constructor(
                     .setCredentialsProvider(credentialsProvider())
                     .setProgressMonitor(monitor)
                     .call()
+                Unit
             }
         }
     }
@@ -96,7 +97,7 @@ class GitManager @Inject constructor(
                     isSuccessful = result.isSuccessful,
                     fetchResult = result.fetchResult?.messages ?: "",
                     mergeResult = result.mergeResult?.toString() ?: "",
-                    rebaseResult = result.rebaseResult?.status?.name() ?: ""
+                    rebaseResult = result.rebaseResult?.status?.name ?: ""
                 )
             }
         }
@@ -125,7 +126,7 @@ class GitManager @Inject constructor(
                     } ?: false,
                     messages = result?.messages ?: "",
                     updates = result?.remoteUpdates?.map {
-                        "${it.remoteName}: ${it.status.name()}"
+                        "${it.remoteName}: ${it.status.name}"
                     } ?: emptyList()
                 )
             }
@@ -169,6 +170,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Stage") {
             openGit(localPath).use { git ->
                 git.add().addFilepattern(filePath).call()
+                Unit
             }
         }
     }
@@ -177,6 +179,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Stage all") {
             openGit(localPath).use { git ->
                 git.add().addFilepattern(".").call()
+                Unit
             }
         }
     }
@@ -185,6 +188,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Unstage") {
             openGit(localPath).use { git ->
                 git.reset().addPath(filePath).call()
+                Unit
             }
         }
     }
@@ -193,6 +197,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Unstage all") {
             openGit(localPath).use { git ->
                 git.reset().call()
+                Unit
             }
         }
     }
@@ -240,6 +245,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Create branch") {
             openGit(localPath).use { git ->
                 git.branchCreate().setName(branchName).call()
+                Unit
             }
         }
     }
@@ -255,6 +261,7 @@ class GitManager @Inject constructor(
                     .setBranchNames(Constants.R_HEADS + branchName)
                     .setForce(force)
                     .call()
+                Unit
             }
         }
     }
@@ -267,6 +274,7 @@ class GitManager @Inject constructor(
                         .setOldName(oldName)
                         .setNewName(newName)
                         .call()
+                    Unit
                 }
             }
         }
@@ -282,6 +290,7 @@ class GitManager @Inject constructor(
                     .setName(branchName)
                     .setCreateBranch(create)
                     .call()
+                Unit
             }
         }
     }
@@ -299,7 +308,7 @@ class GitManager @Inject constructor(
                 val mergeResult = git.merge().include(sourceRef).call()
                 MergeResultInfo(
                     isSuccessful = mergeResult.mergeStatus.isSuccessful,
-                    status = mergeResult.mergeStatus.name(),
+                    status = mergeResult.mergeStatus.name,
                     newHead = mergeResult.newHead?.name ?: "",
                     conflicts = mergeResult.conflicts?.keys?.toList() ?: emptyList()
                 )
@@ -337,6 +346,7 @@ class GitManager @Inject constructor(
                 val cmd = git.tag().setName(tagName)
                 if (!message.isNullOrBlank()) cmd.setMessage(message)
                 cmd.call()
+                Unit
             }
         }
     }
@@ -345,6 +355,7 @@ class GitManager @Inject constructor(
         runCatchingJGit("Delete tag") {
             openGit(localPath).use { git ->
                 git.tagDelete().setTags(tagName).call()
+                Unit
             }
         }
     }
@@ -409,9 +420,7 @@ class GitManager @Inject constructor(
 
                 val entry = entries.find {
                     it.newPath == filePath || it.oldPath == filePath
-                } ?: return@use Result.failure(
-                    GitException("No changes found for file: $filePath")
-                )
+                } ?: throw GitException("No changes found for file: $filePath")
 
                 val outputStream = java.io.ByteArrayOutputStream()
                 val formatter = DiffFormatter(outputStream)
