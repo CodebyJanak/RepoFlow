@@ -3,6 +3,7 @@ package com.repoflow.core.di
 import com.repoflow.core.data.repository.ActionsRepositoryImpl
 import com.repoflow.core.data.repository.ActivityRepositoryImpl
 import com.repoflow.core.data.repository.PcBridgeRepositoryImpl
+import com.repoflow.core.data.repository.GitPilotRepositoryImpl
 import com.repoflow.core.data.repository.AuthRepositoryImpl
 import com.repoflow.core.data.repository.GitRepositoryImpl
 import com.repoflow.core.data.repository.IssuesRepositoryImpl
@@ -12,6 +13,7 @@ import com.repoflow.core.data.repository.WorkspaceRepositoryImpl
 import com.repoflow.core.domain.repository.ActionsRepository
 import com.repoflow.core.domain.repository.ActivityRepository
 import com.repoflow.core.domain.repository.PcBridgeRepository
+import com.repoflow.core.domain.repository.GitPilotRepository
 import com.repoflow.core.domain.repository.AuthRepository
 import com.repoflow.core.domain.repository.GitRepository
 import com.repoflow.core.domain.repository.IssuesRepository
@@ -63,4 +65,8 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindPcBridgeRepository(impl: PcBridgeRepositoryImpl): PcBridgeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindGitPilotRepository(impl: GitPilotRepositoryImpl): GitPilotRepository
 }

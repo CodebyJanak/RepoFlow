@@ -30,6 +30,12 @@ import com.repoflow.feature.pcbridge.PcBridgeDiscoveryScreen
 import com.repoflow.feature.pcbridge.PcBridgePairingScreen
 import com.repoflow.feature.pcbridge.PcBridgeRemoteScreen
 import com.repoflow.feature.pcbridge.PcBridgeScreen
+import com.repoflow.feature.gitpilot.ChangelogScreen
+import com.repoflow.feature.gitpilot.CommitMessageScreen
+import com.repoflow.feature.gitpilot.ConflictHelpScreen
+import com.repoflow.feature.gitpilot.GitErrorHelpScreen
+import com.repoflow.feature.gitpilot.GitPilotScreen
+import com.repoflow.feature.gitpilot.RepoSummaryScreen
 import com.repoflow.feature.repositorydetail.RepositoryDetailScreen
 import com.repoflow.feature.repositories.RepositoriesScreen
 import com.repoflow.feature.settings.SettingsScreen
@@ -613,6 +619,107 @@ fun AppNavHost(
             popExitTransition = NavAnimations.popExitTransition
         ) {
             PcBridgeRemoteScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilot.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilot.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            GitPilotScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateTo = { feature ->
+                    val route = when (feature) {
+                        "commit" -> Routes.GitPilotCommit.createRoute()
+                        "changelog" -> Routes.GitPilotChangelog.createRoute()
+                        "error-help" -> Routes.GitPilotErrorHelp.createRoute()
+                        "conflict-help" -> Routes.GitPilotConflictHelp.createRoute()
+                        "repo-summary" -> Routes.GitPilotRepoSummary.createRoute()
+                        else -> return@GitPilotScreen
+                    }
+                    navController.navigate(route)
+                }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilotCommit.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilotCommit.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            CommitMessageScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilotChangelog.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilotChangelog.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            ChangelogScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilotErrorHelp.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilotErrorHelp.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            GitErrorHelpScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilotConflictHelp.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilotConflictHelp.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            ConflictHelpScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.GitPilotRepoSummary.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.GitPilotRepoSummary.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            RepoSummaryScreen(
                 onBack = { navController.popBackStack() }
             )
         }

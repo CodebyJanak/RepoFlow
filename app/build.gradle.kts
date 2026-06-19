@@ -58,6 +58,7 @@ dependencies {
     implementation(project(":feature-pull-requests"))
     implementation(project(":feature-actions"))
     implementation(project(":feature-pc-bridge"))
+    implementation(project(":feature-git-pilot"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

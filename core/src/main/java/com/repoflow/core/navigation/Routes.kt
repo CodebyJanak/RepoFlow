@@ -119,6 +119,30 @@ sealed class Routes(
         fun createRoute(deviceId: String): String = "pc-bridge/remote/$deviceId"
     }
 
+    data object GitPilot : Routes("git-pilot", "https://repoflow.app/git-pilot") {
+        fun createRoute(): String = "git-pilot"
+    }
+
+    data object GitPilotCommit : Routes("git-pilot/commit", "https://repoflow.app/git-pilot/commit") {
+        fun createRoute(): String = "git-pilot/commit"
+    }
+
+    data object GitPilotChangelog : Routes("git-pilot/changelog", "https://repoflow.app/git-pilot/changelog") {
+        fun createRoute(): String = "git-pilot/changelog"
+    }
+
+    data object GitPilotErrorHelp : Routes("git-pilot/error-help", "https://repoflow.app/git-pilot/error-help") {
+        fun createRoute(): String = "git-pilot/error-help"
+    }
+
+    data object GitPilotConflictHelp : Routes("git-pilot/conflict-help", "https://repoflow.app/git-pilot/conflict-help") {
+        fun createRoute(): String = "git-pilot/conflict-help"
+    }
+
+    data object GitPilotRepoSummary : Routes("git-pilot/repo-summary", "https://repoflow.app/git-pilot/repo-summary") {
+        fun createRoute(): String = "git-pilot/repo-summary"
+    }
+
     companion object {
         val bottomNavRoutes = listOf(Home, Repositories, Workspace, Activity, Settings)
 
