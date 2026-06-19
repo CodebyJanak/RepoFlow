@@ -24,6 +24,7 @@ import com.repoflow.core.data.remote.dto.GithubWorkflowRunListResponse
 import com.repoflow.core.data.remote.dto.GithubRepoDto
 import com.repoflow.core.data.remote.dto.GithubUserDto
 import com.repoflow.core.data.remote.dto.GithubPullRequestMergeDto
+import com.repoflow.core.data.remote.dto.GithubWorkflowListResponse
 import com.repoflow.core.data.remote.dto.MergePullRequestRequest
 import com.repoflow.core.data.remote.dto.UpdatePullRequestRequest
 import okhttp3.ResponseBody
@@ -33,6 +34,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -209,7 +211,6 @@ interface ApiService {
         @Path("pull_number") pullNumber: Int,
         @Body request: MergePullRequestRequest
     ): Response<GithubPullRequestMergeDto>
-}
 
     @GET("repos/{owner}/{repo}/actions/workflows")
     suspend fun getWorkflows(
