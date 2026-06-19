@@ -181,14 +181,15 @@ fun RepoSummaryScreen(
                 Text("Generate Summary")
             }
 
-            if (state.error != null) {
+            val error = state.error
+            if (error != null) {
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     )
                 ) {
                     Text(
-                        text = state.error,
+                        text = error,
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         style = MaterialTheme.typography.bodySmall
@@ -196,7 +197,8 @@ fun RepoSummaryScreen(
                 }
             }
 
-            state.result?.let { summary ->
+            val summary = state.result
+            if (summary != null) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
@@ -210,9 +212,10 @@ fun RepoSummaryScreen(
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
 
-                        if (!summary.description.isNullOrBlank()) {
+                        val description = summary.description
+                        if (!description.isNullOrBlank()) {
                             Text(
-                                text = summary.description,
+                                text = description,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 modifier = Modifier.padding(top = 4.dp)
@@ -230,7 +233,7 @@ fun RepoSummaryScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         LinearProgressIndicator(
-                            progress = { summary.healthScore / 100f },
+                            progress = summary.healthScore / 100f,
                             modifier = Modifier.fillMaxWidth().height(8.dp),
                             color = when {
                                 summary.healthScore >= 80 -> MaterialTheme.colorScheme.primary

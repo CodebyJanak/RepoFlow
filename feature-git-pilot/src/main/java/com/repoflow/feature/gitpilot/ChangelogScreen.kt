@@ -2,6 +2,7 @@ package com.repoflow.feature.gitpilot
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -105,14 +106,15 @@ fun ChangelogScreen(
                 Text("Generate Changelog")
             }
 
-            if (state.error != null) {
+            val error = state.error
+            if (error != null) {
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     )
                 ) {
                     Text(
-                        text = state.error,
+                        text = error,
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         style = MaterialTheme.typography.bodySmall
@@ -120,7 +122,8 @@ fun ChangelogScreen(
                 }
             }
 
-            state.result?.let { result ->
+            val result = state.result
+            if (result != null) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(

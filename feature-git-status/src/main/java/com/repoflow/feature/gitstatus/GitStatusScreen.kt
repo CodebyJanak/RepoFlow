@@ -451,6 +451,7 @@ private fun SectionHeader(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StatusFileRow(
     file: StatusFile,

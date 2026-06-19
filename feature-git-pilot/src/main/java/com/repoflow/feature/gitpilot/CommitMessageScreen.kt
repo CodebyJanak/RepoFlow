@@ -113,14 +113,15 @@ fun CommitMessageScreen(
                 Text("Generate Commit Message")
             }
 
-            if (state.error != null) {
+            val error = state.error
+            if (error != null) {
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     )
                 ) {
                     Text(
-                        text = state.error,
+                        text = error,
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         style = MaterialTheme.typography.bodySmall
