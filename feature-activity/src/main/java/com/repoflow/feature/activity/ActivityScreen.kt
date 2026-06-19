@@ -23,7 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CallMerge
+import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
@@ -372,7 +372,7 @@ private val ActivityFilter.icon: ImageVector
         ActivityFilter.ALL -> Icons.Filled.Sync
         ActivityFilter.PUSH -> Icons.Filled.ArrowUpward
         ActivityFilter.COMMIT -> Icons.Filled.Commit
-        ActivityFilter.PULL -> Icons.Filled.CallMerge
+        ActivityFilter.PULL -> Icons.AutoMirrored.Filled.CallMerge
         ActivityFilter.FETCH -> Icons.Filled.Refresh
         ActivityFilter.SYNC -> Icons.Filled.Sync
     }
@@ -381,13 +381,13 @@ private val ActivityType.icon: ImageVector
     get() = when (this) {
         ActivityType.COMMIT -> Icons.Filled.Commit
         ActivityType.PUSH -> Icons.Filled.ArrowUpward
-        ActivityType.PULL -> Icons.Filled.CallMerge
+        ActivityType.PULL -> Icons.AutoMirrored.Filled.CallMerge
         ActivityType.FETCH -> Icons.Filled.Refresh
         ActivityType.CLONE -> Icons.Filled.ContentCopy
         ActivityType.BRANCH_SWITCH -> Icons.Filled.AccountTree
         ActivityType.BRANCH_CREATE -> Icons.Filled.Add
         ActivityType.BRANCH_DELETE -> Icons.Filled.Delete
-        ActivityType.MERGE -> Icons.Filled.CallMerge
+        ActivityType.MERGE -> Icons.AutoMirrored.Filled.CallMerge
         ActivityType.ERROR -> Icons.Filled.Error
     }
 

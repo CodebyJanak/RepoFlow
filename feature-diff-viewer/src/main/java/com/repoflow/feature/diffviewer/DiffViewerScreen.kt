@@ -419,10 +419,8 @@ private fun SideBySideDiffView(diffFile: DiffFile, language: String) {
                 HunkHeader(hunk)
             }
 
-            val hunkRows = remember(hunk) { buildHunkSideBySideRows(hunk) }
-
             itemsIndexed(
-                items = hunkRows,
+                items = buildHunkSideBySideRows(hunk),
                 key = { index, _ -> "sb_hunk_${hunkIndex}_row_$index" }
             ) { _, row ->
                 SideBySideRow(row, language)
