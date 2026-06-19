@@ -19,7 +19,7 @@ import androidx.compose.material.icons.outlined.Bio
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -125,7 +125,7 @@ fun AccountScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                HorizontalDivider(
+                Divider(
                     color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
                 )
 

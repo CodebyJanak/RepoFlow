@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowUpward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CallMerge
@@ -34,7 +34,7 @@ import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -168,8 +168,8 @@ private fun FilterChipRow(
                 border = FilterChipDefaults.filterChipBorder(
                     borderColor = MaterialTheme.colorScheme.outlineVariant,
                     selectedBorderColor = MaterialTheme.colorScheme.primary,
-                    enabled = true,
-                    selected = selectedFilter == filter
+                    disabledBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    disabledSelectedBorderColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -249,7 +249,7 @@ private fun DateHeader(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.width(12.dp))
-        HorizontalDivider(
+        Divider(
             modifier = Modifier.weight(1f),
             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
         )
@@ -368,7 +368,7 @@ private fun formatRelativeTime(timestamp: Long): String {
 private val ActivityFilter.icon: ImageVector
     get() = when (this) {
         ActivityFilter.ALL -> Icons.Filled.Sync
-        ActivityFilter.PUSH -> Icons.AutoMirrored.Filled.ArrowUpward
+        ActivityFilter.PUSH -> Icons.Filled.ArrowUpward
         ActivityFilter.COMMIT -> Icons.Filled.Commit
         ActivityFilter.PULL -> Icons.Filled.CallMerge
         ActivityFilter.FETCH -> Icons.Filled.Refresh
@@ -378,7 +378,7 @@ private val ActivityFilter.icon: ImageVector
 private val ActivityType.icon: ImageVector
     get() = when (this) {
         ActivityType.COMMIT -> Icons.Filled.Commit
-        ActivityType.PUSH -> Icons.AutoMirrored.Filled.ArrowUpward
+        ActivityType.PUSH -> Icons.Filled.ArrowUpward
         ActivityType.PULL -> Icons.Filled.CallMerge
         ActivityType.FETCH -> Icons.Filled.Refresh
         ActivityType.CLONE -> Icons.Filled.ContentCopy

@@ -32,7 +32,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -194,7 +194,7 @@ private fun PullRequestDetailContent(
             }
         }
 
-        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant) }
+        item { Divider(color = MaterialTheme.colorScheme.surfaceVariant) }
 
         item { SectionTitle("Reviews (${reviews.size})") }
 
@@ -304,7 +304,7 @@ private fun PullRequestDetailContent(
             }
         }
 
-        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant) }
+        item { Divider(color = MaterialTheme.colorScheme.surfaceVariant) }
 
         item { SectionTitle("Comments (${reviewComments.size})") }
 

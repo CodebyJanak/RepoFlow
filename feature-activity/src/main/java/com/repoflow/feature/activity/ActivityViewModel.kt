@@ -1,5 +1,6 @@
 package com.repoflow.feature.activity
 
+import androidx.lifecycle.viewModelScope
 import com.repoflow.core.domain.model.ActivityItem
 import com.repoflow.core.domain.model.ActivityType
 import com.repoflow.core.domain.repository.ActivityRepository

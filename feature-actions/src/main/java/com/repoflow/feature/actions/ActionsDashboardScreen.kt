@@ -53,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.repoflow.core.domain.model.Artifact
 import com.repoflow.core.domain.model.RunConclusion
 import com.repoflow.core.domain.model.RunStatus
+import com.repoflow.core.domain.model.Workflow
 import com.repoflow.core.domain.model.WorkflowRun
 import com.repoflow.core.ui.components.EmptyState
 import com.repoflow.core.ui.components.FeatureCard

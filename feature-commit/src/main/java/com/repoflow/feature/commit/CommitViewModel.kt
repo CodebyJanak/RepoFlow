@@ -88,7 +88,7 @@ class CommitViewModel @Inject constructor(
         val newSubject = if (current.startsWith("${template.prefix}:")) {
             current
         } else {
-            "${template.prefix}: ${current.removePrefix(Regex("^\\w+:\\s*"))}"
+            "${template.prefix}: ${current.replaceFirst(Regex("^\\w+:\\s*"), "")}"
         }
         _uiState.value = _uiState.value.copy(subject = newSubject)
     }
