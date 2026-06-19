@@ -18,6 +18,18 @@ import com.repoflow.feature.commit.CommitScreen
 import com.repoflow.feature.diffviewer.DiffViewerScreen
 import com.repoflow.feature.home.HomeScreen
 import com.repoflow.feature.gitstatus.GitStatusScreen
+import com.repoflow.feature.issues.CreateIssueScreen
+import com.repoflow.feature.issues.IssueDetailScreen
+import com.repoflow.feature.issues.IssuesScreen
+import com.repoflow.feature.pullrequests.CreatePullRequestScreen
+import com.repoflow.feature.pullrequests.PullRequestDetailScreen
+import com.repoflow.feature.pullrequests.PullRequestsScreen
+import com.repoflow.feature.actions.ActionsDashboardScreen
+import com.repoflow.feature.actions.WorkflowRunDetailScreen
+import com.repoflow.feature.pcbridge.PcBridgeDiscoveryScreen
+import com.repoflow.feature.pcbridge.PcBridgePairingScreen
+import com.repoflow.feature.pcbridge.PcBridgeRemoteScreen
+import com.repoflow.feature.pcbridge.PcBridgeScreen
 import com.repoflow.feature.repositorydetail.RepositoryDetailScreen
 import com.repoflow.feature.repositories.RepositoriesScreen
 import com.repoflow.feature.settings.SettingsScreen
@@ -173,6 +185,15 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() },
                 onNavigateToGitStatus = { localPath ->
                     navController.navigate(Routes.GitStatus.createRoute(localPath))
+                },
+                onNavigateToIssues = {
+                    navController.navigate(Routes.Issues.createRoute(owner, name))
+                },
+                onNavigateToPullRequests = {
+                    navController.navigate(Routes.PullRequests.createRoute(owner, name))
+                },
+                onNavigateToActions = {
+                    navController.navigate(Routes.Actions.createRoute(owner, name))
                 }
             )
         }
@@ -255,6 +276,343 @@ fun AppNavHost(
                 localPath = localPath,
                 filePath = filePath,
                 staged = staged,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.Issues.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.Issues.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            IssuesScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onIssueClick = { issueNumber ->
+                    navController.navigate(Routes.IssueDetail.createRoute(owner, name, issueNumber))
+                },
+                onCreateIssue = {
+                    navController.navigate(Routes.CreateIssue.createRoute(owner, name))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.IssueDetail.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("issueNumber") { type = NavType.IntType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.IssueDetail.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            val issueNumber = backStackEntry.arguments?.getInt("issueNumber") ?: 0
+            IssueDetailScreen(
+                owner = owner,
+                name = name,
+                issueNumber = issueNumber,
+                onBack = { navController.popBackStack() },
+                onEdit = {
+                    navController.navigate(Routes.EditIssue.createRoute(owner, name, issueNumber))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.CreateIssue.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.CreateIssue.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            CreateIssueScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onSuccess = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.EditIssue.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("issueNumber") { type = NavType.IntType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.EditIssue.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            val issueNumber = backStackEntry.arguments?.getInt("issueNumber") ?: 0
+            CreateIssueScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onSuccess = { navController.popBackStack() },
+                editIssueNumber = issueNumber
+            )
+        }
+
+        composable(
+            route = Routes.PullRequests.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PullRequests.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            PullRequestsScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onPullRequestClick = { pullNumber ->
+                    navController.navigate(Routes.PullRequestDetail.createRoute(owner, name, pullNumber))
+                },
+                onCreatePullRequest = {
+                    navController.navigate(Routes.CreatePullRequest.createRoute(owner, name))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.PullRequestDetail.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("pullNumber") { type = NavType.IntType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PullRequestDetail.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            val pullNumber = backStackEntry.arguments?.getInt("pullNumber") ?: 0
+            PullRequestDetailScreen(
+                owner = owner,
+                name = name,
+                pullNumber = pullNumber,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.CreatePullRequest.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.CreatePullRequest.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            CreatePullRequestScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onSuccess = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.Actions.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.Actions.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            ActionsDashboardScreen(
+                owner = owner,
+                name = name,
+                onBack = { navController.popBackStack() },
+                onRunClick = { runId ->
+                    navController.navigate(Routes.ActionRunDetail.createRoute(owner, name, runId))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.ActionRunDetail.route,
+            arguments = listOf(
+                navArgument("owner") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("runId") { type = NavType.LongType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.ActionRunDetail.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val owner = backStackEntry.arguments?.getString("owner") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            val runId = backStackEntry.arguments?.getLong("runId") ?: 0L
+            WorkflowRunDetailScreen(
+                owner = owner,
+                name = name,
+                runId = runId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.PcBridge.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PcBridge.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            PcBridgeScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToDiscovery = {
+                    navController.navigate(Routes.PcBridgeDiscovery.createRoute())
+                },
+                onNavigateToPairing = { device ->
+                    navController.navigate(
+                        Routes.PcBridgePairing.createRoute(device.host, device.port, device.deviceId)
+                    )
+                },
+                onNavigateToRemote = { deviceId ->
+                    navController.navigate(Routes.PcBridgeRemote.createRoute(deviceId))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.PcBridgeDiscovery.route,
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PcBridgeDiscovery.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            PcBridgeDiscoveryScreen(
+                onBack = { navController.popBackStack() },
+                onDeviceSelected = { device ->
+                    navController.navigate(
+                        Routes.PcBridgePairing.createRoute(device.host, device.port, device.deviceId)
+                    )
+                }
+            )
+        }
+
+        composable(
+            route = Routes.PcBridgePairing.route,
+            arguments = listOf(
+                navArgument("host") { type = NavType.StringType },
+                navArgument("port") { type = NavType.IntType },
+                navArgument("deviceId") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PcBridgePairing.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) { backStackEntry ->
+            val host = backStackEntry.arguments?.getString("host") ?: ""
+            val port = backStackEntry.arguments?.getInt("port") ?: 0
+            val deviceId = backStackEntry.arguments?.getString("deviceId") ?: ""
+            val device = com.repoflow.core.domain.model.PcDevice(
+                deviceId = deviceId,
+                deviceName = deviceId,
+                host = host,
+                port = port,
+                protocolVersion = "1.0.0",
+                requiresPairing = true
+            )
+            PcBridgePairingScreen(
+                device = device,
+                onBack = { navController.popBackStack() },
+                onPaired = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.PcBridgeRemote.route,
+            arguments = listOf(
+                navArgument("deviceId") { type = NavType.StringType }
+            ),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = Routes.PcBridgeRemote.deepLink }
+            ),
+            enterTransition = NavAnimations.enterTransition,
+            exitTransition = NavAnimations.exitTransition,
+            popEnterTransition = NavAnimations.popEnterTransition,
+            popExitTransition = NavAnimations.popExitTransition
+        ) {
+            PcBridgeRemoteScreen(
                 onBack = { navController.popBackStack() }
             )
         }

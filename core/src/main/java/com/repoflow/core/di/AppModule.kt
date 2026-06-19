@@ -1,13 +1,21 @@
 package com.repoflow.core.di
 
+import com.repoflow.core.data.repository.ActionsRepositoryImpl
 import com.repoflow.core.data.repository.ActivityRepositoryImpl
+import com.repoflow.core.data.repository.PcBridgeRepositoryImpl
 import com.repoflow.core.data.repository.AuthRepositoryImpl
 import com.repoflow.core.data.repository.GitRepositoryImpl
+import com.repoflow.core.data.repository.IssuesRepositoryImpl
+import com.repoflow.core.data.repository.PullRequestsRepositoryImpl
 import com.repoflow.core.data.repository.SettingsRepositoryImpl
 import com.repoflow.core.data.repository.WorkspaceRepositoryImpl
+import com.repoflow.core.domain.repository.ActionsRepository
 import com.repoflow.core.domain.repository.ActivityRepository
+import com.repoflow.core.domain.repository.PcBridgeRepository
 import com.repoflow.core.domain.repository.AuthRepository
 import com.repoflow.core.domain.repository.GitRepository
+import com.repoflow.core.domain.repository.IssuesRepository
+import com.repoflow.core.domain.repository.PullRequestsRepository
 import com.repoflow.core.domain.repository.SettingsRepository
 import com.repoflow.core.domain.repository.WorkspaceRepository
 import dagger.Binds
@@ -39,4 +47,20 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindIssuesRepository(impl: IssuesRepositoryImpl): IssuesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPullRequestsRepository(impl: PullRequestsRepositoryImpl): PullRequestsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindActionsRepository(impl: ActionsRepositoryImpl): ActionsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPcBridgeRepository(impl: PcBridgeRepositoryImpl): PcBridgeRepository
 }

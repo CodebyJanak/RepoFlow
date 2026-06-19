@@ -39,6 +39,86 @@ sealed class Routes(
             "diff-viewer?localPath=${Uri.encode(localPath)}&filePath=${Uri.encode(filePath)}&staged=$staged"
     }
 
+    data object Issues : Routes("issues/{owner}/{name}", "https://repoflow.app/issues/{owner}/{name}") {
+        fun createRoute(owner: String, name: String): String = "issues/$owner/$name"
+    }
+
+    data object IssueDetail : Routes(
+        "issue/{owner}/{name}/{issueNumber}",
+        "https://repoflow.app/issue/{owner}/{name}/{issueNumber}"
+    ) {
+        fun createRoute(owner: String, name: String, issueNumber: Int): String =
+            "issue/$owner/$name/$issueNumber"
+    }
+
+    data object CreateIssue : Routes(
+        "create-issue/{owner}/{name}",
+        "https://repoflow.app/create-issue/{owner}/{name}"
+    ) {
+        fun createRoute(owner: String, name: String): String = "create-issue/$owner/$name"
+    }
+
+    data object EditIssue : Routes(
+        "edit-issue/{owner}/{name}/{issueNumber}",
+        "https://repoflow.app/edit-issue/{owner}/{name}/{issueNumber}"
+    ) {
+        fun createRoute(owner: String, name: String, issueNumber: Int): String =
+            "edit-issue/$owner/$name/$issueNumber"
+    }
+
+    data object PullRequests : Routes("pull-requests/{owner}/{name}", "https://repoflow.app/pull-requests/{owner}/{name}") {
+        fun createRoute(owner: String, name: String): String = "pull-requests/$owner/$name"
+    }
+
+    data object PullRequestDetail : Routes(
+        "pull-request/{owner}/{name}/{pullNumber}",
+        "https://repoflow.app/pull-request/{owner}/{name}/{pullNumber}"
+    ) {
+        fun createRoute(owner: String, name: String, pullNumber: Int): String =
+            "pull-request/$owner/$name/$pullNumber"
+    }
+
+    data object CreatePullRequest : Routes(
+        "create-pull-request/{owner}/{name}",
+        "https://repoflow.app/create-pull-request/{owner}/{name}"
+    ) {
+        fun createRoute(owner: String, name: String): String = "create-pull-request/$owner/$name"
+    }
+
+    data object Actions : Routes("actions/{owner}/{name}", "https://repoflow.app/actions/{owner}/{name}") {
+        fun createRoute(owner: String, name: String): String = "actions/$owner/$name"
+    }
+
+    data object ActionRunDetail : Routes(
+        "action-run/{owner}/{name}/{runId}",
+        "https://repoflow.app/action-run/{owner}/{name}/{runId}"
+    ) {
+        fun createRoute(owner: String, name: String, runId: Long): String = "action-run/$owner/$name/$runId"
+    }
+
+    data object PcBridge : Routes("pc-bridge", "https://repoflow.app/pc-bridge") {
+        fun createRoute(): String = "pc-bridge"
+    }
+
+    data object PcBridgeDiscovery : Routes("pc-bridge/discovery", "https://repoflow.app/pc-bridge/discovery") {
+        fun createRoute(): String = "pc-bridge/discovery"
+    }
+
+    data object PcBridgePairing : Routes(
+        "pc-bridge/pairing/{host}/{port}/{deviceId}",
+        "https://repoflow.app/pc-bridge/pairing/{host}/{port}/{deviceId}"
+    ) {
+        fun createRoute(host: String, port: Int, deviceId: String): String =
+            "pc-bridge/pairing/$host/$port/$deviceId"
+    }
+
+    data object PcBridgeRemote : Routes(
+        "pc-bridge/remote/{deviceId}",
+        "https://repoflow.app/pc-bridge/remote/{deviceId}"
+    ) {
+        fun createRoute(deviceId: String): String = "pc-bridge/remote/$deviceId"
+    }
+
     companion object {
         val bottomNavRoutes = listOf(Home, Repositories, Workspace, Activity, Settings)
 

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.CallMerge
 import androidx.compose.material.icons.filled.CallSplit
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ExpandLess
@@ -40,6 +41,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.GitBranch
@@ -94,6 +96,9 @@ fun RepositoryDetailScreen(
     name: String,
     onBack: () -> Unit,
     onNavigateToGitStatus: (String) -> Unit = {},
+    onNavigateToIssues: () -> Unit = {},
+    onNavigateToPullRequests: () -> Unit = {},
+    onNavigateToActions: () -> Unit = {},
     viewModel: RepositoryDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -166,6 +171,9 @@ fun RepositoryDetailScreen(
                     state = state,
                     onBranchSelected = viewModel::selectBranch,
                     onNavigateToGitStatus = onNavigateToGitStatus,
+                    onNavigateToIssues = onNavigateToIssues,
+                    onNavigateToPullRequests = onNavigateToPullRequests,
+                    onNavigateToActions = onNavigateToActions,
                     modifier = Modifier.padding(padding)
                 )
             }
@@ -178,6 +186,9 @@ private fun RepositoryDetailContent(
     state: RepositoryDetailUiState,
     onBranchSelected: (Branch) -> Unit,
     onNavigateToGitStatus: (String) -> Unit = {},
+    onNavigateToIssues: () -> Unit = {},
+    onNavigateToPullRequests: () -> Unit = {},
+    onNavigateToActions: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val repo = state.repository ?: return
@@ -200,6 +211,25 @@ private fun RepositoryDetailContent(
             GitStatusCard(
                 repoName = repo.name,
                 onNavigateToGitStatus = onNavigateToGitStatus
+            )
+        }
+
+        item {
+            IssuesCard(
+                openIssues = repo.openIssues,
+                onNavigateToIssues = onNavigateToIssues
+            )
+        }
+
+        item {
+            PullRequestsCard(
+                onNavigateToPullRequests = onNavigateToPullRequests
+            )
+        }
+
+        item {
+            ActionsCard(
+                onNavigateToActions = onNavigateToActions
             )
         }
 
@@ -888,6 +918,43 @@ private fun GitStatusCard(
         title = "Git Status",
         description = "View modified, new, and deleted files. Stage or unstage changes for $repoName.",
         onClick = { onNavigateToGitStatus(repoName) }
+    )
+}
+
+@Composable
+private fun IssuesCard(
+    openIssues: Int,
+    onNavigateToIssues: () -> Unit
+) {
+    FeatureCard(
+        icon = Icons.Filled.BugReport,
+        title = "Issues ($openIssues)",
+        description = "View, create, and manage GitHub issues for this repository.",
+        onClick = onNavigateToIssues
+    )
+}
+
+@Composable
+private fun PullRequestsCard(
+    onNavigateToPullRequests: () -> Unit
+) {
+    FeatureCard(
+        icon = Icons.Filled.CallMerge,
+        title = "Pull Requests",
+        description = "View, create, review, and merge pull requests.",
+        onClick = onNavigateToPullRequests
+    )
+}
+
+@Composable
+private fun ActionsCard(
+    onNavigateToActions: () -> Unit
+) {
+    FeatureCard(
+        icon = Icons.Filled.PlayArrow,
+        title = "CI/CD",
+        description = "View workflows, runs, jobs, and artifacts for this repository.",
+        onClick = onNavigateToActions
     )
 }
 
