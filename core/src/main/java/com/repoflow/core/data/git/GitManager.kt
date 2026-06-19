@@ -540,25 +540,6 @@ class GitManager @Inject constructor(
         }
     }
 
-    private fun <T> runCatchingJGit(operation: String, block: () -> Result<T>): Result<T> {
-        return try {
-            block()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Result.failure(mapException(operation, e))
-        }
-    }
-
-    private fun mapException(operation: String, e: Exception): GitException {
-        return when (e) {
-            is TransportException -> mapTransportError(operation, e)
-            is GitAPIException -> mapGitApiError(operation, e)
-            is IOException -> mapIoError(operation, e)
-            else -> GitException("$operation failed: ${e.message}", e)
-        }
-    }
-
     private fun mapTransportError(operation: String, e: TransportException): GitException {
         val message = when {
             e.message?.contains("not authorized") == true ||
