@@ -178,9 +178,10 @@ private fun IssueDetailContent(
             IssueHeader(issue)
         }
 
-        if (!issue.body.isNullOrBlank()) {
+        val body = issue.body
+        if (!body.isNullOrBlank()) {
             item {
-                IssueBody(issue.body)
+                IssueBody(body)
             }
         }
 
