@@ -296,7 +296,7 @@ private fun SummaryCard(
             .fillMaxWidth()
             .animateContentSize(tween(350)),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -397,7 +397,7 @@ private fun StagingActions(
             enabled = !isStageAllLoading && !isUnstageAllLoading,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -464,7 +464,7 @@ private fun StatusFileRow(
             .fillMaxWidth()
             .animateContentSize(tween(200)),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.small,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

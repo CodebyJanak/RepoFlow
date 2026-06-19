@@ -191,7 +191,7 @@ private fun IssueDetailContent(
         }
 
         item {
-            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHighest)
+            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
         }
 
         item {
@@ -222,7 +222,7 @@ private fun IssueDetailContent(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
                     shape = MaterialTheme.shapes.medium
                 ) {
@@ -251,7 +251,7 @@ private fun IssueDetailContent(
                 maxLines = 6,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 shape = MaterialTheme.shapes.medium
             )
@@ -301,7 +301,7 @@ private fun IssueHeader(issue: Issue) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -358,7 +358,7 @@ private fun IssueBody(body: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -402,7 +402,7 @@ private fun CommentItem(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {

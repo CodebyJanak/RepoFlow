@@ -44,7 +44,7 @@ fun AppNavigation() {
                 exit = fadeOut()
             ) {
                 NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surfaceDim,
+                    containerColor = MaterialTheme.colorScheme.surface,
                     tonalElevation = 0.dp
                 ) {
                     BottomNavItem.items.forEach { item ->

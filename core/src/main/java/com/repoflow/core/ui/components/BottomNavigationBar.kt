@@ -43,7 +43,7 @@ fun RepoFlowBottomBar(
 ) {
     NavigationBar(
         modifier = modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.surfaceDim,
+        containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 0.dp,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {

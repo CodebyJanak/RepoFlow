@@ -194,7 +194,7 @@ private fun PullRequestDetailContent(
             }
         }
 
-        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHighest) }
+        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant) }
 
         item { SectionTitle("Reviews (${reviews.size})") }
 
@@ -215,7 +215,7 @@ private fun PullRequestDetailContent(
             item {
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
                     shape = MaterialTheme.shapes.medium
                 ) {
@@ -246,7 +246,7 @@ private fun PullRequestDetailContent(
                     maxLines = 6,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                        unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
                     shape = MaterialTheme.shapes.medium
                 )
@@ -304,7 +304,7 @@ private fun PullRequestDetailContent(
             }
         }
 
-        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHighest) }
+        item { HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant) }
 
         item { SectionTitle("Comments (${reviewComments.size})") }
 
@@ -325,7 +325,7 @@ private fun PullRequestDetailContent(
             item {
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
                     shape = MaterialTheme.shapes.medium
                 ) {
@@ -352,7 +352,7 @@ private fun PullRequestHeader(pullRequest: PullRequest) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -427,7 +427,7 @@ private fun PullRequestBody(body: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -445,7 +445,7 @@ private fun BranchInfo(pullRequest: PullRequest) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -501,7 +501,7 @@ private fun StatsRow(pullRequest: PullRequest) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -685,7 +685,7 @@ private fun ReviewItem(review: PullRequestReview) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -745,7 +745,7 @@ private fun CommentItem(comment: PullRequestComment) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium
     ) {

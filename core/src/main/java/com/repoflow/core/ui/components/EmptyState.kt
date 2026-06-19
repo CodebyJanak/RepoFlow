@@ -99,7 +99,7 @@ fun EmptyState(
 private fun EmptyStatePreview() {
     RepoFlowTheme(darkTheme = true) {
         EmptyState(
-            icon = androidx.compose.material.icons.Icons.Outlined.FolderOff,
+            icon = androidx.compose.material.icons.Icons.Outlined.Folder,
             title = "No repositories",
             message = "Login with GitHub to see your repositories here.",
             actionLabel = "Login",
@@ -113,7 +113,7 @@ private fun EmptyStatePreview() {
 private fun EmptyStateNoActionPreview() {
     RepoFlowTheme(darkTheme = true) {
         EmptyState(
-            icon = androidx.compose.material.icons.Icons.Outlined.SearchOff,
+            icon = androidx.compose.material.icons.Icons.Outlined.Search,
             title = "No results",
             message = "Try searching with a different query."
         )

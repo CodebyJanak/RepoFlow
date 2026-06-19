@@ -41,8 +41,7 @@ fun RepoFlowTopAppBar(
     scrollBehavior: androidx.compose.material3.TopAppBarScrollBehavior? = null
 ) {
     val isScrolled = scrollBehavior?.state?.overlappedFraction?.let {
-        val fraction by it
-        fraction > 0f
+        it > 0f
     } ?: false
 
     val titleAlpha by animateFloatAsState(
@@ -77,8 +76,8 @@ fun RepoFlowTopAppBar(
         },
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceDim,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceDim,
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
             titleContentColor = MaterialTheme.colorScheme.onSurface,
             navigationIconContentColor = MaterialTheme.colorScheme.onSurface
         ),

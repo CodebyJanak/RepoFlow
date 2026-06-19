@@ -119,7 +119,7 @@ fun CreateIssueScreen(
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
                     focusedLabelColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.medium,
@@ -140,7 +140,7 @@ fun CreateIssueScreen(
                 maxLines = 12,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
                     focusedLabelColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.medium

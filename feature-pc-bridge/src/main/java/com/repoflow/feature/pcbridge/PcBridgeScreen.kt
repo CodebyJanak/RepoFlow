@@ -188,7 +188,7 @@ private fun ConnectionStatusCard(state: PcBridgeUiState) {
                 ConnectionStatus.ERROR ->
                     MaterialTheme.colorScheme.errorContainer
                 else ->
-                    MaterialTheme.colorScheme.surfaceContainerHigh
+                    MaterialTheme.colorScheme.surfaceVariant
             }
         ),
         shape = MaterialTheme.shapes.medium
@@ -251,7 +251,7 @@ private fun DeviceCard(
             containerColor = if (isConnected)
                 MaterialTheme.colorScheme.primaryContainer
             else
-                MaterialTheme.colorScheme.surfaceContainerHigh
+                MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.medium,
         onClick = { if (!isConnected) onConnect() }

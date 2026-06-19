@@ -19,9 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.FolderOff
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.SearchOff
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FilterList
@@ -93,7 +93,7 @@ fun RepositoriesScreen(
             state.repositories.isEmpty() -> {
                 val isEmptySearch = state.searchQuery.isNotBlank()
                 EmptyState(
-                    icon = if (isEmptySearch) Icons.Filled.SearchOff else Icons.Filled.FolderOff,
+                    icon = if (isEmptySearch) Icons.Filled.Search else Icons.Filled.Folder,
                     title = if (isEmptySearch) "No results found"
                     else if (state.showFavoritesOnly) "No favorites yet"
                     else "No repositories",
