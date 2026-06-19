@@ -151,8 +151,9 @@ class PcBridgeViewModel @Inject constructor(
     fun loadDirectory(path: String) {
         _remoteState.update { it.copy(isDirectoryLoading = true, error = null) }
         viewModelScope.launch {
-            val result = repository.executeCommand(PcCommand.ListDirectory(path))
+            val result = repository.executeCommand(PcCommand.ListDirectory(path)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(isDirectoryLoading = false, error = "Command failed") } }
                 is PcCommandResult.ListDirectoryResult -> {
                     _remoteState.update {
                         it.copy(
@@ -192,8 +193,9 @@ class PcBridgeViewModel @Inject constructor(
         val workspace = _remoteState.value.selectedWorkspace ?: return
         _remoteState.update { it.copy(isGitLoading = true, error = null) }
         viewModelScope.launch {
-            val result = repository.executeCommand(PcCommand.GitStatus(workspace.id))
+            val result = repository.executeCommand(PcCommand.GitStatus(workspace.id)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(isGitLoading = false, error = "Command failed") } }
                 is PcCommandResult.GitStatusResult -> {
                     _remoteState.update {
                         it.copy(
@@ -221,8 +223,9 @@ class PcBridgeViewModel @Inject constructor(
     fun stageFiles(files: List<String>) {
         val workspace = _remoteState.value.selectedWorkspace ?: return
         viewModelScope.launch {
-            val result = repository.executeCommand(PcCommand.GitStage(workspace.id, files))
+            val result = repository.executeCommand(PcCommand.GitStage(workspace.id, files)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitStageResult -> {
                     if (result.success) loadGitStatus()
                 }
@@ -237,8 +240,9 @@ class PcBridgeViewModel @Inject constructor(
     fun unstageFiles(files: List<String>) {
         val workspace = _remoteState.value.selectedWorkspace ?: return
         viewModelScope.launch {
-            val result = repository.executeCommand(PcCommand.GitUnstage(workspace.id, files))
+            val result = repository.executeCommand(PcCommand.GitUnstage(workspace.id, files)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitUnstageResult -> {
                     if (result.success) loadGitStatus()
                 }
@@ -254,8 +258,9 @@ class PcBridgeViewModel @Inject constructor(
         val workspace = _remoteState.value.selectedWorkspace ?: return
         viewModelScope.launch {
             _remoteState.update { it.copy(error = null, successMessage = null) }
-            val result = repository.executeCommand(PcCommand.GitCommit(workspace.id, message))
+            val result = repository.executeCommand(PcCommand.GitCommit(workspace.id, message)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitCommitResult -> {
                     if (result.success) {
                         _remoteState.update { it.copy(successMessage = "Committed ${result.commitHash.take(7)}") }
@@ -276,8 +281,9 @@ class PcBridgeViewModel @Inject constructor(
             _remoteState.update { it.copy(error = null, successMessage = null) }
             val result = repository.executeCommand(
                 PcCommand.GitPush(workspace.id, branch = _remoteState.value.branch, force = force)
-            )
+            ).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitPushResult -> {
                     if (result.success) {
                         _remoteState.update { it.copy(successMessage = "Pushed ${result.pushedCommits} commits") }
@@ -298,8 +304,9 @@ class PcBridgeViewModel @Inject constructor(
             _remoteState.update { it.copy(error = null, successMessage = null) }
             val result = repository.executeCommand(
                 PcCommand.GitPull(workspace.id, branch = _remoteState.value.branch, rebase = rebase)
-            )
+            ).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitPullResult -> {
                     if (result.success) {
                         _remoteState.update { it.copy(successMessage = "Pulled ${result.commitsCount} commits") }
@@ -318,8 +325,9 @@ class PcBridgeViewModel @Inject constructor(
         val workspace = _remoteState.value.selectedWorkspace ?: return
         viewModelScope.launch {
             _remoteState.update { it.copy(error = null, successMessage = null) }
-            val result = repository.executeCommand(PcCommand.GitFetch(workspace.id))
+            val result = repository.executeCommand(PcCommand.GitFetch(workspace.id)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(error = "Command failed") } }
                 is PcCommandResult.GitFetchResult -> {
                     if (result.success) {
                         _remoteState.update { it.copy(successMessage = "Fetch complete") }
@@ -337,8 +345,9 @@ class PcBridgeViewModel @Inject constructor(
         val workspace = _remoteState.value.selectedWorkspace ?: return
         _remoteState.update { it.copy(isCommitsLoading = true) }
         viewModelScope.launch {
-            val result = repository.executeCommand(PcCommand.ReadGitLog(workspace.id))
+            val result = repository.executeCommand(PcCommand.ReadGitLog(workspace.id)).getOrNull()
             when (result) {
+                null -> { _remoteState.update { it.copy(isCommitsLoading = false) } }
                 is PcCommandResult.ReadGitLogResult -> {
                     _remoteState.update { it.copy(recentCommits = result.commits, isCommitsLoading = false) }
                 }

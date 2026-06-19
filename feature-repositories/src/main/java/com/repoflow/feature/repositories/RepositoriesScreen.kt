@@ -49,6 +49,7 @@ import com.repoflow.core.ui.components.RepoFlowFloatingActionButton
 import com.repoflow.core.ui.components.RepoFlowTopAppBar
 import com.repoflow.core.ui.components.SearchBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepositoriesScreen(
     onNavigateToDetail: (String, String) -> Unit = { _, _ -> },

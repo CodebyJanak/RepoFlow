@@ -150,10 +150,11 @@ fun PcBridgePairingScreen(
                 Text("Pair Device")
             }
 
-            if (state.error != null) {
+            val error = state.error
+            if (error != null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = state.error,
+                    text = error,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center

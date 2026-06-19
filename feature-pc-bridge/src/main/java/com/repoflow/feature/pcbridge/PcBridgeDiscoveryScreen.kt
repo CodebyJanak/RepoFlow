@@ -133,6 +133,7 @@ fun PcBridgeDiscoveryScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DeviceItem(
     device: PcDevice,

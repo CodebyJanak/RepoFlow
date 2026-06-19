@@ -156,6 +156,7 @@ fun PullRequestsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FilterChipsRow(
     currentState: PullRequestState,
@@ -173,7 +174,7 @@ private fun FilterChipsRow(
                 selected = currentState == state,
                 onClick = { onStateSelected(state) },
                 label = { Text(state.name.lowercase().replaceFirstChar { it.uppercase() }) },
-                icon = {
+                leadingIcon = {
                     Icon(
                         imageVector = when (state) {
                             PullRequestState.MERGED -> Icons.Filled.CallMerge

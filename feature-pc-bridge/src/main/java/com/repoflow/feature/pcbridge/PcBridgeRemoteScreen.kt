@@ -161,6 +161,7 @@ fun PcBridgeRemoteScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WorkspaceSelector(
     workspaces: List<PcWorkspace>,
@@ -724,9 +725,10 @@ private fun FileBrowserSection(
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-                        if (entry.size != null && entry.type == PcFileType.FILE) {
+                        val size = entry.size
+                        if (size != null && entry.type == PcFileType.FILE) {
                             Text(
-                                text = formatFileSize(entry.size),
+                                text = formatFileSize(size),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

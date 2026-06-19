@@ -173,8 +173,9 @@ private fun PullRequestDetailContent(
         item { Spacer(modifier = Modifier.height(4.dp)) }
         item { PullRequestHeader(pullRequest) }
 
-        if (!pullRequest.body.isNullOrBlank()) {
-            item { PullRequestBody(pullRequest.body) }
+        val body = pullRequest.body
+        if (!body.isNullOrBlank()) {
+            item { PullRequestBody(body) }
         }
 
         item { BranchInfo(pullRequest) }
@@ -728,10 +729,11 @@ private fun ReviewItem(review: PullRequestReview) {
                     )
                 }
             }
-            if (!review.body.isNullOrBlank()) {
+            val reviewBody = review.body
+            if (!reviewBody.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = review.body,
+                    text = reviewBody,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -765,10 +767,11 @@ private fun CommentItem(comment: PullRequestComment) {
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
-                if (comment.path != null) {
+                val commentPath = comment.path
+                if (commentPath != null) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = comment.path,
+                        text = commentPath,
                         style = MaterialTheme.typography.labelSmall.copy(fontFamily = FontFamily.Monospace),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
