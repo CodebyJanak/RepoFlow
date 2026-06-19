@@ -25,6 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.repoflow.core.theme.RepoFlowTheme
@@ -99,7 +102,7 @@ fun EmptyState(
 private fun EmptyStatePreview() {
     RepoFlowTheme(darkTheme = true) {
         EmptyState(
-            icon = androidx.compose.material.icons.Icons.Outlined.Folder,
+            icon = Icons.Filled.Folder,
             title = "No repositories",
             message = "Login with GitHub to see your repositories here.",
             actionLabel = "Login",
@@ -113,7 +116,7 @@ private fun EmptyStatePreview() {
 private fun EmptyStateNoActionPreview() {
     RepoFlowTheme(darkTheme = true) {
         EmptyState(
-            icon = androidx.compose.material.icons.Icons.Outlined.Search,
+            icon = Icons.Filled.Search,
             title = "No results",
             message = "Try searching with a different query."
         )

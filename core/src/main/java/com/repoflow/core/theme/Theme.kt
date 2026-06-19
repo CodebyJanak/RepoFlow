@@ -86,7 +86,7 @@ object RepoFlowAnimationTokens {
     val defaultTween = tween<Float>(defaultDuration)
     val fastTween = tween<Float>(fastDuration)
     val slowTween = tween<Float>(slowDuration)
-    val spring = androidx.compose.animation.core.spring(
+    val spring = androidx.compose.animation.core.spring<Float>(
         dampingRatio = 0.8f,
         stiffness = 300f
     )
