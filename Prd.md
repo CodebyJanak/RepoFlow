@@ -528,7 +528,7 @@ On Release:
 - Generate Release APK
 - Publish Release
 
----
+-----
 
 27. MVP Scope
 
